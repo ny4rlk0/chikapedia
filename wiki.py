@@ -5,7 +5,7 @@ import wikipedia as wiki
 from PIL import Image
 from io import BytesIO
 from locale import getdefaultlocale
-#warnings.filterwarnings('ignore')
+warnings.filterwarnings('ignore')
 try:
     langue=getdefaultlocale()
     langue=langue[0]
@@ -90,6 +90,5 @@ def clear():
         _=os.system('cls')
     else:
         _=os.system('clear')
-#x()
 if __name__ == "__main__":
     threading.Thread(target=x).start()
