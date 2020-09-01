@@ -1,11 +1,11 @@
 ﻿#!/usr/bin/python
 #coding=utf-8
-import os,sys,warnings,requests,time,urllib,threading
+import os,sys,warnings,requests,time,urllib,threading,csv
 import wikipedia as wiki
 from PIL import Image
 from io import BytesIO
 from locale import getdefaultlocale
-warnings.filterwarnings('ignore')
+#warnings.filterwarnings('ignore')
 try:
     langue=getdefaultlocale()
     langue=langue[0]
@@ -22,27 +22,31 @@ try:
         l_how_many="Kaç sonuç: "
         l_search="Ara: "
         l_learn_more="Resim görmek ve daha fazla öğrenmek istermisin? (E/H)"
+        l_exit=f"Çıkmak için küçük harfle çık.\nProgramı yeniden çalıştırmak için herhangi bişey yazın:\n"
     else:
         l_wiki="wiki: "
         l_how_many="How Many results you want to see: "
         l_search="Search: "
         l_learn_more="Would you like to see pictures and learn more? (Y/N)"
+        l_exit=f"Type quit to exit or anything else to restart the program\n:"
 except:
     os._exit(1)
 def k():
     print("-------------------------------------------")
 def x():
    try:
-    if l=="tr":
+    while True:
         clear()
         print("Yes my Lord!")
         feed=str(input(l_wiki))
+        if feed=="quit" or feed=="çıkış" or feed=="exit" or feed=="q" or feed=="çık":
+            os._exit(1)
         result=int(input(l_how_many))
         k()
         v=wiki.search(feed,results=result)
         n=0
         for s in v:
-            print(f"{v[n]}")
+            print(f"  {v[n]}")# 1-) XXXXXXXX
             n+=1
         k()
         ara=str(input(l_search))
@@ -52,18 +56,20 @@ def x():
         k()
         ans=str(input(l_learn_more))
         ans=ans.lower()
-        if ans=="quit":
-            os._exit(1)
         if ans.startswith("y") or ans.startswith("e"):
+            clear()
             s=wiki.WikipediaPage(title=ara,redirect=True,preload=True)
             cont=s.content
             imgs=s.images
             print(cont)
+            with open("Last Article.txt","w",encoding='UTF-8') as f:#Write content to file
+                w = csv.writer(f,delimiter=",",lineterminator="\n")
+                w.writerow([cont])
             img_num=0
             for i in imgs:
                try:
                 url=imgs[img_num]
-                #urllib.request.urlretrieve(url, f"{img_num}.jpg")#For Downloading Pictures to same directory uncomment to activate.
+                urllib.request.urlretrieve(url, f"Last Article Picture {img_num}.jpg")#For Downloading Pictures to same directory uncomment to activate.
                 img_num+=1
                 time.sleep(1)
                 response = requests.get(url)
@@ -72,6 +78,11 @@ def x():
                except:
                    time.sleep(1)
                    continue
+        stat=input(l_exit)
+        if stat=="quit" or stat=="çık":
+            os._exit(1)
+        else:
+            continue
    except:
        pass
 def clear():
