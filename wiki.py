@@ -21,12 +21,14 @@ try:
         l_wiki="Wikide ara: "
         l_how_many="Kaç sonuç: "
         l_search="Ara: "
+        l_num="Numara gir: "
         l_learn_more="Resim görmek ve daha fazla öğrenmek istermisin? (E/H)"
         l_exit=f"Çıkmak için küçük harfle çık.\nProgramı yeniden çalıştırmak için herhangi bişey yazın:\n"
     else:
         l_wiki="wiki: "
         l_how_many="How Many results you want to see: "
         l_search="Search: "
+        l_num="Enter a number: "
         l_learn_more="Would you like to see pictures and learn more? (Y/N)"
         l_exit=f"Type quit to exit or anything else to restart the program\n:"
 except:
@@ -46,19 +48,22 @@ def x():
         v=wiki.search(feed,results=result)
         n=0
         for s in v:
-            print(f"  {v[n]}")# 1-) XXXXXXXX
+            #print(f"  {v[n]}")# 1-) XXXXXXXX
+            print('['+str(n)+']''-'+v[n])
             n+=1
         k()
-        ara=str(input(l_search))
+        n_index=int(input(l_num))
+        target_info=v[int(n_index)]
+        #ara=str(input(l_search))
         k()
-        a=wiki.summary(ara, auto_suggest=True, redirect=True)
-        print(f"{a}")
+        new_info=wiki.summary(target_info, auto_suggest=True, redirect=True)
+        print(f"{new_info}")
         k()
         ans=str(input(l_learn_more))
         ans=ans.lower()
         if ans.startswith("y") or ans.startswith("e"):
             clear()
-            s=wiki.WikipediaPage(title=ara,redirect=True,preload=True)
+            s=wiki.WikipediaPage(title=target_info,redirect=True,preload=True)
             cont=s.content
             imgs=s.images
             print(cont)
